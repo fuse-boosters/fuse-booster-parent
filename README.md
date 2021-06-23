@@ -1,32 +1,26 @@
 
-## Openshift Developer Sandbox
+## OpenShift Developer Sandbox
 
-https://developers.redhat.com/developer-sandbox/get-started
-
-* Get command line tools from About
+* Connect to the [OpenShift Developer Sandbox](https://developers.redhat.com/developer-sandbox/get-started)
+* Get the command line tools from About
+* Login to your Developer Sandbox
 
 ```
-oc login --token=sha256~FOas... --server=https://api.sandbox...openshiftapps.com:6443
-odo login --token=sha256~FOas... https://api.sandbox...openshiftapps.com:6443
+SANDBOX_URL="https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443"
+AUTH_TOKEN="sha256~axy_GWIJNRFoJGfudPaRQT6xcT6QpK2wm6zelLHKO9A"
+oc login --token=$AUTH_TOKEN --server=$SANDBOX_URL
+odo login --token=$AUTH_TOKEN $SANDBOX_URL
 ```
 
 ## Deploying DevFile with ODO
 
+Pick a Fuse Booster from [fuse-boosters](https://github.com/fuse-boosters?q=fuse-booster) and push it to OpenShift like this ...
+
 ```
-mkdir myproj; cd myproj
-odo create java-maven --starter
-odo url create
+git clone https://github.com/fuse-boosters/fuse-booster-camel-reset-openapi \
+   && cd fuse-booster-camel-reset-openapi
+   
 odo push
 ```
 
-## Local Cluster with Red Hat CodeReady Containers
-
-https://cloud.redhat.com/openshift/create/local
-
-```
-MacBookPro: (13-inch, 2019, Four Thunderbolt 3 ports)
-Processor:  2,4 GHz Quad-Core Intel Core i5
-Memory:     16 GB 2133 MHz LPDDR3
-```
-
-* Consumes too much system resources even when idle.
+Find more information at https://github.com/openshift/odo
