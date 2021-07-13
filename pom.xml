@@ -32,30 +32,28 @@
   <packaging>pom</packaging>
 
   <properties>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
     <version.camel>3.7.4</version.camel>
-    <version.spring.boot>2.4.0</version.spring.boot>
+    <version.quarkus.platform>1.13.7.Final</version.quarkus.platform>
 
     <!-- Plugin versions -->
+    <version-quarkus-plugin>1.13.7.Final</version-quarkus-plugin>
     <version-maven-compiler-plugin>3.8.1</version-maven-compiler-plugin>
+    <version-maven-dependency-plugin>3.2.0</version-maven-dependency-plugin>
     <version-maven-jar-plugin>3.2.0</version-maven-jar-plugin>
-    <version-maven-release-plugin>2.5</version-maven-release-plugin>
-    <version-maven-resources-plugin>3.1.0</version-maven-resources-plugin>
+    <version-maven-release-plugin>3.0.0-M4</version-maven-release-plugin>
+    <version-maven-resources-plugin>3.2.0</version-maven-resources-plugin>
     <version-maven-surefire-plugin>3.0.0-M5</version-maven-surefire-plugin>
   </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${version.spring.boot}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.camel.springboot</groupId>
-        <artifactId>camel-spring-boot-dependencies</artifactId>
-        <version>${version.camel}</version>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-universe-bom</artifactId>
+        <version>${version.quarkus.platform}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -66,9 +64,19 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${version.spring.boot}</version>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-maven-plugin</artifactId>
+          <version>${version-quarkus-plugin}</version>
+          <extensions>true</extensions>
+          <executions>
+            <execution>
+              <goals>
+                <goal>build</goal>
+                <goal>generate-code</goal>
+                <goal>generate-code-tests</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -77,6 +85,18 @@
           <configuration>
             <source>11</source>
             <target>11</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${version-maven-dependency-plugin}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${version-maven-release-plugin}</version>
+          <configuration>
+            <tagNameFormat>@{version}</tagNameFormat>
           </configuration>
         </plugin>
         <plugin>
@@ -93,6 +113,34 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <licenses>
+    <license>
+      <name>apache_v2</name>
+      <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Fuse Booster Committers</name>
+    </developer>
+  </developers>
+
+  <scm>
+      <connection>scm:git:https://github.com/fuse-boosters/fuse-booster-parent</connection>
+      <developerConnection>scm:git:git@github.com:fuse-boosters/fuse-booster-parent</developerConnection>
+      <url>https://github.com/fuse-boosters/fuse-booster-parent</url>
+      <tag>HEAD</tag>
+  </scm>
+  
+  <distributionManagement>
+    <repository>
+      <id>jboss-releases-repository</id>
+      <name>JBoss Releases Repository</name>
+      <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <repositories>
     <repository>
@@ -111,6 +159,14 @@
       <releases>
         <enabled>true</enabled>
       </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jboss-thirdparty-repository</id>
+      <name>JBoss Thirdparty Releases</name>
+      <url>https://repository.jboss.org/nexus/service/local/repositories/thirdparty-releases/content/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -139,4 +195,14 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <properties>
+        <quarkus.container-image.build>true</quarkus.container-image.build>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>
